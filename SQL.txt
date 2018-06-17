@@ -1,0 +1,50 @@
+CREATE TABLE students (
+    id int(10) PRIMARY KEY AUTO_INCREMENT,
+    name varchar(255) NOT null,
+    age int(10)
+) ENGINE = MYISAM;
+
+
+DELIMITER $$
+CREATE PROCEDURE InsertRand()
+    BEGIN
+        DECLARE i INT;
+        SET i = 1;
+        START TRANSACTION;
+        WHILE i <= 100000 DO
+            INSERT INTO students (name, age) VALUES (CONCAT('Studen-', i ), ROUND((RAND() * (100-1))+1) );
+            SET i = i + 1;
+        END WHILE;
+        COMMIT;
+    END$$
+DELIMITER ;
+
+CALL InsertRand();
+
+CREATE TABLE studentsIndex (
+    id int(10) PRIMARY KEY AUTO_INCREMENT,
+    name varchar(255) NOT null,
+    age int(10)
+) ENGINE = MYISAM;
+
+
+
+CREATE INDEX indexStudent
+on studentsIndex (id);
+
+
+DELIMITER $$
+CREATE PROCEDURE InsertRand2()
+    BEGIN
+        DECLARE i INT;
+        SET i = 1;
+        START TRANSACTION;
+        WHILE i <= 100000 DO
+            INSERT INTO studentsIndex (name, age) VALUES (CONCAT('Studen-', i ), ROUND((RAND() * (100-1))+1) );
+            SET i = i + 1;
+        END WHILE;
+        COMMIT;
+    END$$
+DELIMITER ;
+
+CALL InsertRand2();
